@@ -76,7 +76,7 @@ class LoadModelDemo {
     LoadModel(){
         const loader = new THREE.FBXLoader();
 
-        loader.load('./hongjuname.fbx',(fbx)=>{
+        loader.load('./resources/hongjuname.fbx',(fbx)=>{
             fbx.scale.setScalar(0.2);
             fbx.traverse(c=>{
                 const textureload = new THREE.TextureLoader().load('./brushed_metal.jpeg');
