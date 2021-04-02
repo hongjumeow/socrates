@@ -79,7 +79,7 @@ class LoadModelDemo {
         loader.load('./resources/hongjuname.fbx',(fbx)=>{
             fbx.scale.setScalar(0.2);
             fbx.traverse(c=>{
-                const textureload = new THREE.TextureLoader().load('./brushed_metal.jpeg');
+                const textureload = new THREE.TextureLoader().load('./resources/brushed_metal.jpeg');
                 c.castShadow=true;
                 c.material = new THREE.MeshBasicMaterial({
                     map:textureload,
