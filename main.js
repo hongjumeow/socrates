@@ -45,6 +45,25 @@ class LoadModelDemo {
         controls.update();
 
 
+        //create a globe
+        
+        const RADIUS =20;
+        const SEGMENTS = 50;
+        const RINGS = 50;
+        
+        const globe = new THREE.Group();
+
+        var textureloader = new THREE.TextureLoader();
+        textureloader.load('./resources/earth.jpeg',function(texture){
+        var sphere = new THREE.SphereGeometry(RADIUS,SEGMENTS,RINGS);
+        var material = new THREE.MeshBasicMaterial({map:texture});
+        var mesh = new THREE.Mesh(sphere,material);
+        globe.add(mesh);
+        });
+
+        this.scene.add(globe);
+
+        //create a background
 
         const loader = new THREE.CubeTextureLoader();
         this.scene.background = loader.load([
