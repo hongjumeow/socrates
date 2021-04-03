@@ -89,7 +89,7 @@ class LoadModelDemo {
 
         this._mixers = [];
         this._previousRAF = null;
-        //this.LoadModel();
+        this.LoadModel();
         this._RAF();
     }
     LoadModel(){
@@ -105,6 +105,7 @@ class LoadModelDemo {
                     });
                 });
             fbx.rotation.x=-Math.PI/2;
+            fbx.position(60,0,0);
             this.scene.add(fbx);
 
         })
