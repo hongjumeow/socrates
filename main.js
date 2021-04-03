@@ -105,7 +105,7 @@ class LoadModelDemo {
                     });
                 });
             fbx.rotation.x=-Math.PI/2;
-            fbx.position(60,0,0);
+            fbx.position.set(60,0,0);
             this.scene.add(fbx);
 
         })
