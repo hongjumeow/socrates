@@ -89,7 +89,7 @@ class LoadModelDemo {
 
         this._mixers = [];
         this._previousRAF = null;
-        this.LoadModel();
+        //this.LoadModel();
         this._RAF();
     }
     LoadModel(){
