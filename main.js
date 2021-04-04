@@ -1,159 +1,72 @@
-function createPlanet(scene,camera,planet,radius,type,x,y,z){
- 
-  // planet = new THREE.Group();
+let camera, renderer, scene;
+let mesh;
 
-  const SEGMENTS = 50;
-  const RINGS = 50;
+function init(){
 
-  var textureloader = new THREE.TextureLoader();
+    renderer = new THREE.WebGLRenderer({canvas: document.querySelector("#canvas")});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth,window.innerHeight);
 
-  textureloader.load(type,function(texture){
-    var sphere = new THREE.SphereGeometry(radius,SEGMENTS,RINGS);
-    var material = new THREE.MeshBasicMaterial({map:texture});
-    var mesh = new THREE.Mesh(sphere,material);
-  
-    planet.position.set(x,y,z);
-    planet.add(mesh);
+    camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1.0,1000);
+    camera.position.set(50,0,50);
+    scene = new THREE.Scene();
 
-  });
+    renderer.render(scene,camera);
 
-  scene.add(planet);
 
-  // planet.rotation.set(0,0,0);
-  // animate(scene,camera,planet);
-  return;
+    const controls = new THREE.OrbitControls(
+        camera, renderer.domElement);
+    controls.target.set(0,0, 0);
+    controls.update();
+
+    let light = new THREE.AmbientLight(0xffffff,1);
+    light.position.set(100,50,100);
+    scene.add(light);
+
+    let earth = new THREE.SphereGeometry(10,100,100);
+    createPlanet(earth,'./resources/earth.jpeg',0,0,0);
+          
+    const loader = new THREE.CubeTextureLoader();
+
+    scene.background = loader.load([
+        './skybox_space/corona_pz.png',
+        './skybox_space/corona_nz.png',
+        './skybox_space/corona_py.png',
+        './skybox_space/corona_ny.png',
+        './skybox_space/corona_px.png',
+        './skybox_space/corona_nx.png',
+
+    ]);
+
+
 }
-class LoadModelDemo {
-    constructor(){
-        this.Initialize();
-    }
-    Initialize(){
-        this.renderer = new THREE.WebGLRenderer({antialias:true});
-        this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setSize(window.innerWidth,window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
 
-        window.addEventListener('resize',() => {
-            this.OnWindowResize();
-        },false);
+function createPlanet(planet,type,x,y,z){
+ 
+    var texture = new THREE.TextureLoader().load(type);
+    var material = new THREE.MeshBasicMaterial({map:texture});
 
-        this.camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1.0,1000);
-  
-        this.camera.position.set(75,20,0);
-
-        this.scene = new THREE.Scene();
-
-        // let light = new THREE.DirectionalLight(0x696969,0.3);
-        // light.position.set(20,100,10);
-        // light.target.position.set(0,0,0);
-        // light.castShadow = true;
-        // light.shadow.bias = -0.001;
-        // light.shadow.mapSize.width = 2048;
-        // light.shadow.mapSize.height = 2048;
-        // light.shadow.camera.near = 0.1;
-        // light.shadow.camera.far = 500.0;
-        // light.shadow.camera.near = 0.5;
-        // light.shadow.camera.far = 500.0;
-        // light.shadow.camera.left = 100;
-        // light.shadow.camera.right = -100;
-        // light.shadow.camera.top = 100;
-        // light.shadow.camera.bottom = -100;
-        // this.scene.add(light);
-
-        let light = new THREE.AmbientLight(0xDC143C,1);
-        this.scene.add(light);
+    mesh=new THREE.Mesh(planet,material);
+    mesh.position.set(x,y,z);
+    mesh.rotation.x+=0.5;
+    scene.add(mesh);
+    
+}
 
 
-        const controls = new THREE.OrbitControls(
-            this.camera, this.renderer.domElement);
-        controls.target.set(0,-10, 0);
-        controls.update();
+function resize(){
 
-        let earth = new THREE.Group();
-        createPlanet(this.scene,this.camera,earth,20,'./resources/earth.jpeg',0,0,0);
-        
-        let moon = new THREE.Group();
-        createPlanet(this.scene,this.camera,moon,10,'./resources/moon.jpeg',0,50,50);
-  
-//         create a background
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
-        const loader = new THREE.CubeTextureLoader();
-        this.scene.background = loader.load([
-            './skybox_space/corona_pz.png',
-            './skybox_space/corona_nz.png',
-            './skybox_space/corona_py.png',
-            // './IMG_0205.jpg',
-            './skybox_space/corona_ny.png',
-            './skybox_space/corona_px.png',
-            './skybox_space/corona_nx.png',
+function animate(){
+    resize();
+    mesh.rotation.y+=0.0005;
+    renderer.render(scene,camera);
+    requestAnimationFrame(animate);
+}
 
-        ]);
-            
-        // const plane = new THREE.Mesh(
-        //     new THREE.PlaneGeometry(10000, 10000, 10, 10),
-        //     new THREE.MeshStandardMaterial({
-        //         color: 0x000000,
-        //     }));
-        // plane.castShadow = false;
-        // plane.receiveShadow = true;
-        // plane.rotation.x = -Math.PI / 2;
-        // this.scene.add(plane)
-
-        this._mixers = [];
-        this._previousRAF = null;
-        this.LoadModel();
-        this._RAF();
-    }
-    LoadModel(){
-        const loader = new THREE.FBXLoader();
-
-        loader.load('./resources/hongjuname.fbx',(fbx)=>{
-            fbx.scale.setScalar(0.2);
-            fbx.traverse(c=>{
-                const textureload = new THREE.TextureLoader().load('./resources/brushed_metal.jpeg');
-                c.castShadow=true;
-                c.material = new THREE.MeshBasicMaterial({
-                    map:textureload,
-                    });
-                });
-            fbx.rotation.x=-Math.PI/2;
-            fbx.position.set(-30,0,60);
-            this.scene.add(fbx);
-
-        })
-    }
-    OnWindowResize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-  _RAF() {
-    requestAnimationFrame((t) => {
-      if (this._previousRAF === null) {
-        this._previousRAF = t;
-      }
-
-      this._RAF();
-
-      this.renderer.render(this.scene, this.camera);
-      this._Step(t - this._previousRAF);
-      this._previousRAF = t;
-    });
-  }
-
-  _Step(timeElapsed) {
-    const timeElapsedS = timeElapsed * 0.001;
-    if (this._mixers) {
-      this._mixers.map(m => m.update(timeElapsedS));
-    }
-
-    if (this._controls) {
-      this._controls.Update(timeElapsedS);
-    }
-  }
-};
-let _APP = null;
-window.addEventListener('DOMContentLoaded',()=>{
-    _APP = new LoadModelDemo();
-});
+init();
+animate();
