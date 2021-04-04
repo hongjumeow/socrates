@@ -1,3 +1,28 @@
+function createPlanet(scene,camera,planet,radius,type,x,y,z){
+ 
+  // planet = new THREE.Group();
+
+  const SEGMENTS = 50;
+  const RINGS = 50;
+
+  var textureloader = new THREE.TextureLoader();
+
+  textureloader.load(type,function(texture){
+    var sphere = new THREE.SphereGeometry(radius,SEGMENTS,RINGS);
+    var material = new THREE.MeshBasicMaterial({map:texture});
+    var mesh = new THREE.Mesh(sphere,material);
+  
+    planet.position.set(x,y,z);
+    planet.add(mesh);
+
+  });
+
+  scene.add(planet);
+
+  // planet.rotation.set(0,0,0);
+  // animate(scene,camera,planet);
+  return;
+}
 class LoadModelDemo {
     constructor(){
         this.Initialize();
@@ -44,26 +69,13 @@ class LoadModelDemo {
         controls.target.set(0,-10, 0);
         controls.update();
 
-
-        //create a globe
+        let earth = new THREE.Group();
+        createPlanet(this.scene,this.camera,earth,20,'./resources/earth.jpeg',0,0,0);
         
-        const RADIUS =20;
-        const SEGMENTS = 50;
-        const RINGS = 50;
-        
-        const globe = new THREE.Group();
-
-        var textureloader = new THREE.TextureLoader();
-        textureloader.load('./resources/earth.jpeg',function(texture){
-        var sphere = new THREE.SphereGeometry(RADIUS,SEGMENTS,RINGS);
-        var material = new THREE.MeshBasicMaterial({map:texture});
-        var mesh = new THREE.Mesh(sphere,material);
-        globe.add(mesh);
-        });
-
-        this.scene.add(globe);
-
-        //create a background
+        let moon = new THREE.Group();
+        createPlanet(this.scene,this.camera,moon,10,'./resources/moon.jpeg',0,50,50);
+  
+//         create a background
 
         const loader = new THREE.CubeTextureLoader();
         this.scene.background = loader.load([
