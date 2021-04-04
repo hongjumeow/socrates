@@ -19,7 +19,7 @@ function init(){
     controls.target.set(0,0, 0);
     controls.update();
 
-    let light = new THREE.AmbientLight(0xffffff,1);
+    let light = new THREE.AmbientLight(0x808080,1);
     light.position.set(100,50,100);
     scene.add(light);
 
