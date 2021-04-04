@@ -24,7 +24,7 @@ function init(){
     scene.add(light);
 
     let earth = new THREE.SphereGeometry(10,100,100);
-    createPlanet(earth,'./resources/pink_planet.jpeg',0,0,0);
+    createPlanet(earth,'./resources/darkpink.jpeg',0,0,0);
           
     const loader = new THREE.CubeTextureLoader();
 
