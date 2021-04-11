@@ -1,6 +1,17 @@
 let camera, renderer, scene;
 let mesh;
 
+function loadingScreen = {
+    scene: new THREE.Scene(),
+    camera: new THREE.PerspectiveCamera(60,window.innerWidth/2/window.innerHeight,1.0,1000),
+    
+    box: new THREE.Mesh(
+        new THREE.BoxGeometry(0.5,0.5,0.5),
+        new THREE.MeshBasicMaterial({color:0x4444ff})
+        )
+};
+let RESOURCES_LOADED = false;
+
 function init(){
 
     renderer = new THREE.WebGLRenderer({canvas: document.querySelector("#canvas")});
@@ -11,6 +22,10 @@ function init(){
     camera.position.set(50,0,50);
     scene = new THREE.Scene();
 
+    loadingScreen.box.position.set(0,0,5);
+    loadingScreen.camera.lookAt(loadingScreen.box.position);
+    loadingScreen.scene.add(loadingScreen.box);
+    
     renderer.render(scene,camera);
 
 
@@ -62,7 +77,12 @@ function resize(){
 }
 
 function animate(){
+    if(RESOURCES_LOADED == false){
+        requestAnimationFrame(animate);
+        renderer.render(loadingScreen.scene,loadingScreen.camera);
+    }
     resize();
+    
     mesh.rotation.y+=0.0005;
     renderer.render(scene,camera);
     requestAnimationFrame(animate);
