@@ -1,7 +1,7 @@
 let camera, renderer, scene;
 let mesh;
 
-function loadingScreen = {
+let loadingScreen = {
     scene: new THREE.Scene(),
     camera: new THREE.PerspectiveCamera(60,window.innerWidth/2/window.innerHeight,1.0,1000),
     
@@ -10,6 +10,7 @@ function loadingScreen = {
         new THREE.MeshBasicMaterial({color:0x4444ff})
         )
 };
+
 let RESOURCES_LOADED = false;
 
 function init(){
