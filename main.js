@@ -1,6 +1,9 @@
 let camera, renderer, scene;
 let mesh;
 
+let mixers = [];
+let previousRAF = null;
+
 // let loadingScreen = {
 //     scene: new THREE.Scene(),
 //     camera: new THREE.PerspectiveCamera(60,window.innerWidth/2/window.innerHeight,1.0,1000),
@@ -54,7 +57,42 @@ function init(){
 
     ]);
 
+    const fbxloader = new THREE.FBXLoader();
+    fbxloader.load('./resources/dancer/girl.fbx',(fbx)=>{
+        fbx.scale.setScalar(0.05);
+        fbx.traverse(c=>{
+            c.castShadow = true;
 
+        });
+
+        fbx.position.copy(new THREE.Vector3(0, 9.2, 0));
+        const anim = new THREE.FBXLoader();
+        anim.load('./resources/dancer/dance.fbx',(anim)=>{
+            const m = new THREE.AnimationMixer(fbx);
+            mixers.push(m);
+            const idle = m.clipAction(anim.animations[0]);
+            idle.play();
+        });
+        scene.add(fbx);
+    });
+    RAF();
+
+    // const timeElapsed = timeElapsed *0.001;
+
+}
+function RAF(){
+    requestAnimationFrame((t)=>{
+        if(previousRAF ===null){
+            previousRAF =t;
+        }
+        RAF();
+        renderer.render(scene,camera);
+        const timeElapsedS = (t-previousRAF) * 0.001;
+        if(mixers){
+            mixers.map(m=>m.update(timeElapsedS));
+        }
+        previousRAF = t;
+    });
 }
 
 function createPlanet(planet,type,x,y,z){
