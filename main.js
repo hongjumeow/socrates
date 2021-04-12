@@ -13,14 +13,7 @@ function init(){
     renderer.setSize(window.innerWidth,window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-
-    // loadingScreen.box.position.set(0,0,5);
-    // loadingScreen.camera.lookAt(loadingScreen.box.position);
-    // loadingScreen.scene.add(loadingScreen.box);
-
     renderer.render(scene,camera);
-
 
     const controls = new THREE.OrbitControls(
         camera, renderer.domElement);
@@ -99,10 +92,6 @@ function init(){
     }
     RAF();
     function animate(){
-        // if(RESOURCES_LOADED == false){
-        //     requestAnimationFrame(animate);
-        //     renderer.render(loadingScreen.scene,loadingScreen.camera);
-        // }
         resize();
         mesh.rotation.y+=0.0005;
         renderer.render(scene,camera);
@@ -131,4 +120,3 @@ window.addEventListener('resize', function(){
 });
 init();
 
-// animate();
