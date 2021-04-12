@@ -65,9 +65,9 @@ function init(){
 
         });
 
-        fbx.position.copy(new THREE.Vector3(0, 9.2, 0));
+        fbx.position.copy(new THREE.Vector3(2, -3.8, 4.7));
         const anim = new THREE.FBXLoader();
-        anim.load('./resources/dancer/dance.fbx',(anim)=>{
+        anim.load('./resources/dancer/Sitting.fbx',(anim)=>{
             const m = new THREE.AnimationMixer(fbx);
             mixers.push(m);
             const idle = m.clipAction(anim.animations[0]);
