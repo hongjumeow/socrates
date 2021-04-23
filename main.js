@@ -87,7 +87,7 @@ function init(){
     let previousRAF = null;
 
     const fbxloader = new THREE.FBXLoader();
-    fbxloader.load('./resources/dancer/kachujin.fbx',(fbx)=>{
+    fbxloader.load('./resources/dancer/girl.fbx',(fbx)=>{
         fbx.scale.setScalar(0.15);
         fbx.traverse(c=>{
             c.castShadow = true;
