@@ -20,11 +20,16 @@ function init(){
     renderer.render(scene,camera);
 
 
+
     const controls = new THREE.OrbitControls(
         camera, renderer.domElement);
     controls.target.set(0,0, 0);
+    controls.minDistance =20;
+    controls.maxDistance = 150;
+    controls.noKeys = true;
+    // controls.rotateSpeed = 1.4;
     controls.update();
-    // controls.enablePan = true;
+    controls.enablePan = true;
     controls.enableDamping = true;
 
 
