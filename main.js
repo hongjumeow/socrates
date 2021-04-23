@@ -1,6 +1,6 @@
 let camera, renderer, scene;
 let mesh;
-// function init(){
+
 
     camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1.0,1000);
     camera.position.set(50,0,50);
@@ -18,7 +18,6 @@ let mesh;
     // loadingScreen.scene.add(loadingScreen.box);
 
     renderer.render(scene,camera);
-
 
 
     const controls = new THREE.OrbitControls(
@@ -72,14 +71,14 @@ let mesh;
     scene.add(stars);
 
     // create a sphere
-    let sphere = new THREE.SphereGeometry();
-    let sphereMaterial = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        shading : THREE.FlatShading,
-    });
-    let menu = new THREE.Mesh(sphere,sphereMaterial);
-    menu.position.set(20,20,0);
-    scene.add(menu);
+    // let sphere = new THREE.SphereGeometry();
+    // let sphereMaterial = new THREE.MeshPhongMaterial({
+    //     color: 0xffffff,
+    //     shading : THREE.FlatShading,
+    // });
+    // let menu = new THREE.Mesh(sphere,sphereMaterial);
+    // menu.position.set(20,20,0);
+    // scene.add(menu);
 
     // get animation file
 
@@ -93,6 +92,25 @@ let mesh;
             c.castShadow = true;
         });
         fbx.position.copy(new THREE.Vector3(2, -3.8, 4.7));
+
+        const anim = new THREE.FBXLoader();
+        anim.load('./resources/dancer/Sitting.fbx',(anim)=>{
+            const m = new THREE.AnimationMixer(fbx);
+            mixers.push(m);
+            const idle = m.clipAction(anim.animations[0]);
+            idle.play();
+        });
+        scene.add(fbx);
+    });
+
+    const fbxloader2 = new THREE.FBXLoader();
+    fbxloader2.load('./resources/dancer/aj.fbx',(fbx)=>{
+        fbx.scale.setScalar(0.15);
+        fbx.traverse(c=>{
+            c.castShadow = true;
+        });
+        fbx.position.copy(new THREE.Vector3(-2, 3.8, -4.7));
+        fbx.rotation.x=Math.PI;
 
         const anim = new THREE.FBXLoader();
         anim.load('./resources/dancer/Sitting.fbx',(anim)=>{
@@ -131,40 +149,40 @@ let mesh;
     }
     animate();
 
-    var raycaster = new THREE.Raycaster(),INTERSECTED;
-    var mouse = new THREE.Vector2();
-    raycaster.setFromCamera(mouse, camera);
-    var intersects = raycaster.intersectObjects(menu);
-    if (intersects.length > 0) {
-        if (INTERSECTED != intersects[0].object) {
-            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-            INTERSECTED = intersects[0].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            //setting up new material on hover
-            INTERSECTED.material.emissive.setHex(Math.random() * 0xff00000 - 0xff00000);
-        }
-    } else {
-        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-        INTERSECTED = null;
-    }
+    // var raycaster = new THREE.Raycaster(),INTERSECTED;
+    // var mouse = new THREE.Vector2();
+    // raycaster.setFromCamera(mouse, camera);
+    // var intersects = raycaster.intersectObjects(menu);
+    // if (intersects.length > 0) {
+    //     if (INTERSECTED != intersects[0].object) {
+    //         if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+    //         INTERSECTED = intersects[0].object;
+    //         INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+    //         //setting up new material on hover
+    //         INTERSECTED.material.emissive.setHex(Math.random() * 0xff00000 - 0xff00000);
+    //     }
+    // } else {
+    //     if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+    //     INTERSECTED = null;
+    // }
 
 
-    function onDocumentMouseDown(event) {
-        event.preventDefault();
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        raycaster.setFromCamera(mouse, camera);
-        var intersects = raycaster.intersectObjects(menu);
-        if (intersects.length > 0) {
-        //get a link from the userData object
-            window.open('https://www.instagram.com/');
-        }
-    };
+    // function onDocumentMouseDown(event) {
+    //     event.preventDefault();
+    //     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    //     raycaster.setFromCamera(mouse, camera);
+    //     var intersects = raycaster.intersectObjects(menu);
+    //     if (intersects.length > 0) {
+    //     //get a link from the userData object
+    //         window.open('https://www.instagram.com/');
+    //     }
+    // };
 
-    document.addEventListener('mousedown', onDocumentMouseDown, false);
+    // document.addEventListener('mousedown', onDocumentMouseDown, false);
 
     // const timeElapsed = timeElapsed *0.001;
-// }
+
 
 
 
