@@ -1,6 +1,6 @@
 let camera, renderer, scene;
 let mesh;
-function init(){
+// function init(){
 
     camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1.0,1000);
     camera.position.set(50,0,50);
@@ -164,7 +164,7 @@ function init(){
     document.addEventListener('mousedown', onDocumentMouseDown, false);
 
     // const timeElapsed = timeElapsed *0.001;
-}
+// }
 
 
 
@@ -183,6 +183,6 @@ window.addEventListener('load', function(){
 window.addEventListener('resize', function(){
     resize();
 });
-init();
+// init();
 
 // animate();
