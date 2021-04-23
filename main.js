@@ -1,7 +1,5 @@
 let camera, renderer, scene;
 let mesh;
-
-
 function init(){
 
     camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1.0,1000);
@@ -13,7 +11,14 @@ function init(){
     renderer.setSize(window.innerWidth,window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+
+    // loadingScreen.box.position.set(0,0,5);
+    // loadingScreen.camera.lookAt(loadingScreen.box.position);
+    // loadingScreen.scene.add(loadingScreen.box);
+
     renderer.render(scene,camera);
+
 
     const controls = new THREE.OrbitControls(
         camera, renderer.domElement);
@@ -43,21 +48,39 @@ function init(){
           
     const loader = new THREE.CubeTextureLoader();
 
-    scene.background = loader.load([
-        './skybox_space/corona_pz.png',
-        './skybox_space/corona_nz.png',
-        './skybox_space/corona_py.png',
-        './skybox_space/corona_ny.png',
-        './skybox_space/corona_px.png',
-        './skybox_space/corona_nx.png',
+    // scene.background = loader.load([
+    //     './skybox_space/corona_pz.png',
+    //     './skybox_space/corona_nz.png',
+    //     './skybox_space/corona_py.png',
+    //     './skybox_space/corona_ny.png',
+    //     './skybox_space/corona_px.png',
+    //     './skybox_space/corona_nx.png',
 
-    ]);
+    // ]);
+    let stars = new THREE.Mesh(
+        new THREE.SphereGeometry(120, 1200, 1200),
+        new THREE.MeshBasicMaterial({
+          map:  THREE.ImageUtils.loadTexture('resources/galaxy_starfield.png'),
+          side: THREE.BackSide
+        })
+    );
+    scene.add(stars);
 
-    // let animControls = null;
+    // create a sphere
+    let sphere = new THREE.SphereGeometry();
+    let sphereMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        shading : THREE.FlatShading,
+    });
+    let menu = new THREE.Mesh(sphere,sphereMaterial);
+    menu.position.set(20,20,0);
+    scene.add(menu);
+
+    // get animation file
 
     let mixers = [];
     let previousRAF = null;
-    
+
     const fbxloader = new THREE.FBXLoader();
     fbxloader.load('./resources/dancer/girl.fbx',(fbx)=>{
         fbx.scale.setScalar(0.15);
@@ -92,12 +115,49 @@ function init(){
     }
     RAF();
     function animate(){
+        // if(RESOURCES_LOADED == false){
+        //     requestAnimationFrame(animate);
+        //     renderer.render(loadingScreen.scene,loadingScreen.camera);
+        // }
         resize();
         mesh.rotation.y+=0.0005;
         renderer.render(scene,camera);
         requestAnimationFrame(animate);
     }
     animate();
+
+    var raycaster = new THREE.Raycaster(),INTERSECTED;
+    var mouse = new THREE.Vector2();
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(menu);
+    if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            //setting up new material on hover
+            INTERSECTED.material.emissive.setHex(Math.random() * 0xff00000 - 0xff00000);
+        }
+    } else {
+        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+        INTERSECTED = null;
+    }
+
+
+    function onDocumentMouseDown(event) {
+        event.preventDefault();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        var intersects = raycaster.intersectObjects(menu);
+        if (intersects.length > 0) {
+        //get a link from the userData object
+            window.open('https://www.instagram.com/');
+        }
+    };
+
+    document.addEventListener('mousedown', onDocumentMouseDown, false);
+
     // const timeElapsed = timeElapsed *0.001;
 }
 
@@ -120,3 +180,4 @@ window.addEventListener('resize', function(){
 });
 init();
 
+// animate();
