@@ -48,7 +48,7 @@ let mesh;
         
     }
     let geometry = new THREE.SphereGeometry(10,100,100);
-    createPlanet(geometry,'./resources/earth.jpeg',0,0,0);
+    createPlanet(geometry,'./resources/lightpink.png',0,0,0);
           
     const loader = new THREE.CubeTextureLoader();
 
