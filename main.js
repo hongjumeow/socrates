@@ -43,7 +43,7 @@ let mesh;
     
         mesh=new THREE.Mesh(planet,material);
         mesh.position.set(x,y,z);
-        mesh.rotation.x+=0.1;
+        mesh.rotation.x+=0.3;
         scene.add(mesh);
         
     }
