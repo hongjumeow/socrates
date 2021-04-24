@@ -64,7 +64,7 @@ let mesh;
     let stars = new THREE.Mesh(
         new THREE.SphereGeometry(120, 1200, 1200),
         new THREE.MeshBasicMaterial({
-          map:  THREE.ImageUtils.loadTexture('resources/galaxy_starfield.png'),
+          map:  THREE.ImageUtils.loadTexture('resources/01.jpg'),
           side: THREE.BackSide
         })
     );
